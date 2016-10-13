@@ -1,7 +1,7 @@
 """INSTA SEARCH"""
 
 from jinja2 import StrictUndefined
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 # from flask_debugtoolbar import DebugToolbarExtension
 # from model import connect_to_db, db, Picture
@@ -23,6 +23,17 @@ def index():
     """Homepage."""
 
     return render_template("homepage.html")
+
+@app.route('/', methods=['POST'])
+def get_credentials_for_search():
+
+    tag = request.form['tag']
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
+    
+    print "here they are, successfully on the backend!"
+    print tag, start_date, end_date
+    return tag, start_date, end_date
 
 
 if __name__ == "__main__":
