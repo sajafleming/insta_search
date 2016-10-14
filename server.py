@@ -4,7 +4,8 @@ from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from get_photos import request_insta_data
 # from flask_debugtoolbar import DebugToolbarExtension
-# from model import connect_to_db, db, Picture
+from model import connect_to_db, db, Picture, Tag
+import datetime 
 
 app = Flask(__name__)
 
@@ -29,13 +30,52 @@ def search_insta():
     tag = request.args.get("tag")
     start_time = request.args.get("start")
     end_time = request.args.get("end")
-
     print tag, start_time, end_time
 
-    # make api call using params
-    results = request_insta_data(tag)
+    # to help limiting api rates, first check the db for the tag
+    exists = False
+    # exists = db.session.query(db.exists().where(Tag.tag == tag)).scalar()
+    if exists:
+        urls = Tags.query.filter_by(tag=tag).first()
+        return 
+    else:
 
-    return jsonify(pic_urls=results)
+        # make api call using params
+        results = request_insta_data(tag)
+
+        urls_within_time = []
+        urls_all = []
+
+        # add results to db and gather urls to display
+        for i in range(len(results['data'])):
+
+            url = results['data'][i]['images']['low_resolution']['url']
+            # add all urls to store with tag in db
+            urls_all.append(url)
+
+            timestamp = results['data'][i]['created_time']
+            # convert to date: "yyyy-mm-dd"
+            time = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%d %H:%M:%S')[:10]
+
+            # p = Picture((url, time))
+            # db.session.add(p)
+            # db.session.commit()
+
+            # t = Tag()
+            
+            # print start_time, time, end_time
+            # check to see if pic in date range and add to urls to display
+            if start_time == None and end_time == None:
+                urls_within_time.append(url)
+            if start_time == None and time < end_time:
+                urls_within_time.append(url)
+            if end_time == None and start_time < time:
+                urls_within_time.append(url)
+            if start_time < time < end_time:
+                urls_within_time.append(url)
+
+        # CHANGED TO RETURN URLS WITHIN TIME
+        return jsonify(pic_urls=urls_within_time)
 
 
 if __name__ == "__main__":
@@ -49,3 +89,5 @@ if __name__ == "__main__":
     # DebugToolbarExtension(app)
 
     app.run()
+
+    app.run(host="0.0.0.0", port=5000)
