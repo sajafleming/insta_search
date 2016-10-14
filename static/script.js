@@ -5,6 +5,9 @@ $(document).ready(function () {
   $('#user-input-form').submit(function(evt) {
     evt.preventDefault()
 
+    // clear existing photos
+    $('#pictures').empty()
+
     console.log('got here')
 
     var tag = $('#tag').val();

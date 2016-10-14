@@ -28,7 +28,7 @@ def request_insta_data(tag, access_token=None):
 
     return final_urls
 
-print request_insta_data('LGB')
+# print request_insta_data('LGB')
 
 
 # data = request_insta_data('LGB')
