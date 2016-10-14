@@ -1,3 +1,5 @@
+"""query instagram api and return urls that match"""
+
 from instagram.client import InstagramAPI
 import urllib
 import urllib2
@@ -12,13 +14,24 @@ def request_insta_data(tag, access_token=None):
     access_token = os.environ['ACCESS_TOKEN']
 
     url_request = URL.format(tag, access_token)
-    print url_request
 
     response = urllib2.urlopen(url_request)
     data = response.read()
+    pic_info = json.loads(data)
 
-    return json.loads(data)
+    final_urls = []
 
-print request_insta_data('LGB')
+    # for pic in pic_info:
+    url = pic_info['data'][0]['images']['low_resolution']['url']
+    final_urls.append(url)
+
+    return final_urls
+
+# print request_insta_data('LGB')
+
+# data = request_insta_data('LGB')
+# print data
+
+# print data["pagination"]["url"]
 
 # https://api.instagram.com/v1/tags/{tag-name}/media/recent?access_token=ACCESS-TOKEN

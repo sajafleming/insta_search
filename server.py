@@ -1,8 +1,9 @@
 """INSTA SEARCH"""
 
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from get_photos import request_insta_data
 # from flask_debugtoolbar import DebugToolbarExtension
 # from model import connect_to_db, db, Picture
 
@@ -24,16 +25,19 @@ def index():
 
     return render_template("homepage.html")
 
-@app.route('/', methods=['POST'])
-def get_credentials_for_search():
-
-    tag = request.form['tag']
-    start_date = request.form['start_date']
-    end_date = request.form['end_date']
+@app.route('/search-insta', methods=['GET'])
+def search_insta():
     
-    print "here they are, successfully on the backend!"
-    print tag, start_date, end_date
-    return tag, start_date, end_date
+    # get instagram search params
+    tag = request.args.get("tag")
+    start_time = request.args.get("start")
+    end_time = request.args.get("end")
+
+    print tag, start_time, end_time
+
+    results = request_insta_data(tag)
+
+    return jsonify(pic_urls=results)
 
 
 if __name__ == "__main__":
