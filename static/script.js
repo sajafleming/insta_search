@@ -11,11 +11,13 @@ $(document).ready(function () {
 
     // get values from user textboxes
     var tag = $('#tag').val();
-    var start_time = $('#start_time').val();
-    var end_time = $('#end_time').val();
+    var start_date = $('#start_date').val();
+    var end_date = $('#end_date').val();
+
+    console.log(tag, start_date, end_date)
    
     // set the params for the instagram query
-    var params = {"tag": tag, "start": start_time, "end": end_time};
+    var params = {"tag": tag, "start": start_date, "end": end_date};
 
     // ajax call to get pictures, along with success funct to show pics
     $.get("search-insta", params, showPictures);
