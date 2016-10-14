@@ -15,3 +15,7 @@ form {
     font-family: "Comic Sans MS", cursive, sans-serif;
     color: #008080;
 }
+
+#pictures {
+    text-align: center;
+}
