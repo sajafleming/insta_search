@@ -1,23 +1,23 @@
 "use strict";
 $(document).ready(function () {
 
-  // get values from user text boxes
+  // get values form values and make instagram request when user submits
   $('#user-input-form').submit(function(evt) {
+    // preventDefault of going to a new page (since POST request)
     evt.preventDefault()
 
-    // clear existing photos
+    // clear existing photos on page
     $('#pictures').empty()
 
-    console.log('got here')
-
+    // get values from user textboxes
     var tag = $('#tag').val();
     var start_time = $('#start_time').val();
     var end_time = $('#end_time').val();
    
-    // get the params for the instagram query
+    // set the params for the instagram query
     var params = {"tag": tag, "start": start_time, "end": end_time};
 
-    // ajax call to get pictures
+    // ajax call to get pictures, along with success funct to show pics
     $.get("search-insta", params, showPictures);
 
   });
@@ -25,14 +25,16 @@ $(document).ready(function () {
   
   function showPictures(data) {
 
-    console.log(data)
-
+    // number of pics returned
     var picturesLength = data.pic_urls.length;
 
     if (picturesLength == 0) {
-      alert("no results with that tag")
+      // if there are no pictures, alert the user
+      alert("no results, try a different tag")
+
     } else {
 
+      // loop through pictures and create img tags to add to html
       for (var i = 0; i < picturesLength; i++) {
 
         var pic = data.pic_urls[i]
@@ -41,18 +43,13 @@ $(document).ready(function () {
 
         html += pic + '" />';
       
-
         console.log(html)
 
         $('#pictures').prepend(html);
 
-
       }
-
       
     }
-
-    
 
   }
 

@@ -1,22 +1,19 @@
 """INSTA SEARCH"""
 
-from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from get_photos import request_insta_data
 # from flask_debugtoolbar import DebugToolbarExtension
 # from model import connect_to_db, db, Picture
 
-
 app = Flask(__name__)
 
 # required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-
 # raise an error in case there is an undefined variable in Jinja2, otherwise,
 # it will fail silently
-app.jinja_env.undefined = StrictUndefined
+# app.jinja_env.undefined = StrictUndefined
 
 
 @app.route('/')
@@ -35,6 +32,7 @@ def search_insta():
 
     print tag, start_time, end_time
 
+    # make api call using params
     results = request_insta_data(tag)
 
     return jsonify(pic_urls=results)
@@ -45,7 +43,7 @@ if __name__ == "__main__":
     # that we invoke the DebugToolbarExtension
     app.debug = True
 
-    # connect_to_db(app)
+    connect_to_db(app)
 
     # Use the DebugToolbar
     # DebugToolbarExtension(app)
