@@ -1,3 +1,17 @@
-h2  {
-    color: blue;
+body {
+    background-color: #FCFBE3;
+}
+
+h2 {
+  font: 400 100px/1.5 'Pacifico', Helvetica, sans-serif;
+  text-align: center;
+  margin: auto;
+  color: #00CDCD;
+  text-shadow: 3px 3px 0px rgba(0,0,0,0.1), 7px 7px 0px rgba(0,0,0,0.05);
+}
+
+form {
+    text-align: center;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    color: #008080;
 }
