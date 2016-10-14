@@ -24,16 +24,32 @@ $(document).ready(function () {
 
     console.log(data)
 
-    var pic = data.pic_urls
-    console.log(pic)
-    var html = '<img id="img" src="';
+    var picturesLength = data.pic_urls.length;
 
-    html += pic + '" />';
-  
+    if (picturesLength == 0) {
+      alert("no results with that tag")
+    } else {
 
-    console.log(html)
+      for (var i = 0; i < picturesLength; i++) {
 
-    $('#pictures').prepend(html);
+        var pic = data.pic_urls[i]
+        console.log(pic)
+        var html = '<img id="img" src="';
+
+        html += pic + '" />';
+      
+
+        console.log(html)
+
+        $('#pictures').prepend(html);
+
+
+      }
+
+      
+    }
+
+    
 
   }
 
