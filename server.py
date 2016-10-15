@@ -141,51 +141,6 @@ def search_insta():
     return jsonify(pic_urls=urls)
 
 
-
-
-
-
-
-    # else:
-    #     # make api call using params
-    #     # results = request_insta_data(tag)
-
-    #     urls_within_time = []
-    #     urls_all = []
-
-    #     # add results to db and gather urls to display
-    #     for i in range(len(results['data'])):
-
-    #         url = results['data'][i]['images']['low_resolution']['url']
-    #         # add all urls to store with tag in db
-    #         urls_all.append(url)
-
-    #         timestamp = results['data'][i]['created_time']
-    #         # convert to date: "yyyy-mm-dd"
-    #         time = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%d %H:%M:%S')[:10]
-
-    #         # add results to the database
-    #         # p = Pic(url)
-    #         # db.session.add(p)
-    #         # db.session.commit()
-
-    #         # t = Datetag(tag, end_date, )
-
-
-    #         # not sure how to add to relationship table
-
-    #         print start_date, time, end_date
-    #         # check to see if pic in date range and add to urls to display
-    #         if start_date == None and end_date == None:
-    #             urls_within_time.append(url)
-    #         if start_date == None and time <= end_date:
-    #             urls_within_time.append(url)
-    #         if end_date == None and start_date <= time:
-    #             urls_within_time.append(url)
-    #         if start_date <= time <= end_date:
-    #             urls_within_time.append(url)
-
-
 connect_to_db(app)
 
 if __name__ == "__main__":
