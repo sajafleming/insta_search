@@ -186,18 +186,14 @@ def search_insta():
     #             urls_within_time.append(url)
 
 
-
+connect_to_db(app)
 
 if __name__ == "__main__":
     # debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
     app.debug = True
 
-    connect_to_db(app)
-
     # Use the DebugToolbar
     # DebugToolbarExtension(app)
-
-    app.run()
 
     app.run(host="0.0.0.0", port=5000)

@@ -1,6 +1,7 @@
 """Models and database functions. Database named picturesdb"""
 
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 # create instance of sqlalchemy db
 db = SQLAlchemy()
@@ -64,13 +65,15 @@ class DateTagToPic(db.Model):
 def connect_to_db(app):
     """Connect the database to Flask app."""
 
+    print "Connecting DB"
     # Configure to PSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///picturesdb'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"] if "DATABASE_URL" in os.environ else 'postgresql:///picturesdb'
     app.config['SQLALCHEMY_ECHO'] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
-    # db.create_all()
+    if not db.engine.dialect.has_table(db.engine.connect(), "pics"):
+        db.create_all()
     db.session.commit()
 
 if __name__ == "__main__":
