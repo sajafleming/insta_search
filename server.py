@@ -57,15 +57,16 @@ def search_insta():
     start_date = request.args.get("start")
     end_date = request.args.get("end")
 
-    # in case the user does not enter dates, assign times
+    # in case the user does not enter dates, assign to None
     if not start_date:
-        start_date = None
+        # set to an arbitrary low date (christmas 1999!)
+        start_date = "1999-12-25"
     if not end_date:
         end_date = None
 
-    # If end date later than today's date, set it to today's date...
+    # if end date later than today's date, set it to today's date...
     today_date = get_date_string(int(time.time()))
-    if today_date < end_date:
+    if end_date == None or today_date < end_date:
         end_date = today_date
 
 
