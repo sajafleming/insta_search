@@ -7,6 +7,8 @@ import os
 import json
 import pprint
 
+NUM_RETRIES = 3
+
 # endpoint for instagram api request
 URL = "https://api.instagram.com/v1/tags/{}/media/recent?access_token={}"
 
@@ -19,33 +21,22 @@ def request_insta_data(tag, access_token=None):
     # add tag and token to request url
     url_request = URL.format(tag, access_token)
 
-    # using the urllib2, make api call
-    response = urllib2.urlopen(url_request)
-    data = response.read()
+    for i in range(NUM_RETRIES):
+        try:
+            # using the urllib2, make api call
+            response = urllib2.urlopen(url_request)
+            data = response.read()
+            break
+        except:
+            print "blah"
+
     pic_info = json.loads(data)
 
-    final_urls = []
-
-    # add url for every pic
-    for i in range(len(pic_info['data'])):
-        url = pic_info['data'][i]['images']['low_resolution']['url']
-        final_urls.append(url)
-
-    return final_urls
-
-# print request_insta_data('LGB')
+    return pic_info
 
 
-# data = request_insta_data('LGB')
+# print request_insta_data('coffee')
+
+
+# data = request_insta_data('coffee')
 # print data
-
-# pp = pprint.PrettyPrinter(indent=1)
-# # pp.pprint(data['data'])
-
-# for i in range(len(data['data'])):
-#     print data['data'][i]['images']['low_resolution']['url']
-#     print "##############################"
-
-# print data["pagination"]["url"]
-
-# https://api.instagram.com/v1/tags/{tag-name}/media/recent?access_token=ACCESS-TOKEN

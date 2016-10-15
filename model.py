@@ -1,6 +1,5 @@
-"""Models and database functions. Database named picturesdb and table 
-name pictures"""
-from flask import Flask
+"""Models and database functions. Database named picturesdb"""
+
 from flask_sqlalchemy import SQLAlchemy
 
 # create instance of sqlalchemy db
@@ -9,25 +8,55 @@ db = SQLAlchemy()
 ##############################################################################
 # Define data model
 
-class Picture(db.Model):
+class Pic(db.Model):
     """Picture class for how to store pics in database"""
 
-    __tablename__ = "pictures"
+    __tablename__ = "pics"
 
-    # pic_id is the id from instagram
-    pic_id = db.Column(db.Integer, primary_key=True)
-    tag = db.Column(db.String(200), nullable=False)
-    tag_date = db.Column(db.DateTime, nullable=False)
-    pic_url = db.Column(db.String(600), nullable=True)
+    pic_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    url = db.Column(db.String(500), nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return ("<Picture pic_id=%s tag=%s tag_date=%s pic_url=%s>"
-                % (self.pic_id, self.tag, self.tag_date, self.pic_url))
-               #add in datetime for released_at later
+        return ("<Pics pic_id=%s url=%s>"
+                % (self.pic_id, self.url))
 
+class Datetag(db.Model):
+    """DateTag pairs with corresponding urls"""
 
+    __tablename__ = "datetags"
+
+    datetag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    date = db.Column(db.String(100), nullable=False)
+    tag = db.Column(db.String(200), nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return ("<Datetag datetag_id=%s date=%s> tag=%s"
+                % (self.datetag_id, self.date, self.tag))
+
+class DateTagToPic(db.Model):
+    """Relationship table"""
+
+    __tablename__ = "date_tags_to_pics"
+
+    relationship_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    datetag_id = db.Column(db.Integer, db.ForeignKey('datetags.datetag_id'), nullable=False)
+    datetag = db.relationship('Datetag',
+        backref=db.backref('datetags', lazy='dynamic'))
+
+    pic_id = db.Column(db.Integer, db.ForeignKey('pics.pic_id'), nullable=False)
+    pic = db.relationship('Pic',
+        backref=db.backref('pics', lazy='dynamic'))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return ("<DateTagToPic datetag_id=%s pic_id=%s>"
+                % (self.datetag_id, self.pic_id))
+        
 ##############################################################################
 # Helper functions
 
@@ -37,13 +66,16 @@ def connect_to_db(app):
 
     # Configure to PSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///picturesdb'
+    app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
-
+    # db.create_all()
+    db.session.commit()
 
 if __name__ == "__main__":
     # run module interactively to work with db directly 
-
+    # db.create_all()
 
     from server import app
     connect_to_db(app)
